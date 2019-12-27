@@ -1,3 +1,4 @@
+import java.util.*;
 /** 
  * This program finds ONE valid path, not necessarily the fastest, and prints it out.
  * If no paths are found, prints out "NO VALID PATH FOUND!"
@@ -7,7 +8,8 @@
 public class omnidirectional 
 {
     static int N; // matrix size
-
+    static int xend; //endpoint's x-value
+    static int yend; //endpoint's y-value
     /**
      * Checks to see if the point in question is valid or invalid
      * @param maze Matrix filled with values of 1 and 0. 1 = valid move, 0 = invalid move 
@@ -35,9 +37,7 @@ public class omnidirectional
      */
     boolean solveMaze(int maze[][], int solution[][], int x, int y) 
     {
-        System.out.println("X = "+ x);
-        System.out.println("Y = "+ y);
-        if (x == N - 1 && y == N - 1) 
+        if (x == xend && y == yend) 
         { //if x and y are equal to the endpoints
             solution[x][y] = 1;
             return true;
@@ -82,9 +82,13 @@ public class omnidirectional
         if (isPath == true) 
         {
             { 
-                for (int i = 0; i < N; i++) { 
+                for (int i = 0; i < N; i++) 
+                { 
                     for (int j = 0; j < N; j++) 
+                    {
                         System.out.print(" " + solution[i][j] + " "); 
+                        
+                    } 
                     System.out.println(); 
                 } 
             } 
@@ -95,8 +99,21 @@ public class omnidirectional
         }
     }
 
-    public static void main(String[] args) {
+    static void printMaze(int maze[][])
+    {
+        for (int i = 0; i < N; i++) 
+        { 
+            for (int j = 0; j < N; j++)
+            {
+                System.out.print(" " + maze[i][j] + " "); 
+                
+            }
+            System.out.println();
+        }    
+    }
 
+    public static void main(String[] args) 
+    {
         omnidirectional path = new omnidirectional();
         int maze[][] = { { 1, 1, 1, 0, 1 }, //maze matrix
                          { 1, 0, 1, 1, 1 },
@@ -105,16 +122,22 @@ public class omnidirectional
                          { 1, 1, 1, 0, 1 } };
 
         N = maze.length;
+        printMaze(maze); //prints out maze so user can see it
+        Scanner cin=new Scanner(System.in); //scanner for input
 
-        int x = 0, y = 0; //starting point. End point is bottom right corner
+        System.out.println("Please specify a startpoint (i.e. 2 3): ");
+        int x=cin.nextInt();
+        int y=cin.nextInt();
+
+        System.out.println("Please specify an endpoint (i.e. 2 3): ");
+        xend=cin.nextInt();
+        yend=cin.nextInt();
+
+        //starting point. End point is bottom right corner
         int solution[][] = new int[N][N]; //solution matrix
-        
-        //System.out.println(N); 
 
         boolean isPath = path.solveMaze(maze, solution, x, y);
 
         printSolution(solution, isPath);
-
     }
-
 }
