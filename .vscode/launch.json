@@ -1,0 +1,56 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - GFG",
+            "request": "launch",
+            "mainClass": "GFG",
+            "projectName": "Backtracking_2bb7e39e"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - omnidirectional",
+            "request": "launch",
+            "mainClass": "omnidirectional",
+            "projectName": "Backtracking_2bb7e39e"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch) - Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-BacktrackingMaze<Backtracking_2bb7e39e>",
+            "request": "launch",
+            "mainClass": "BacktrackingMaze",
+            "projectName": "Backtracking_2bb7e39e"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-BacktrackingMaze_4way<Backtracking_2bb7e39e>",
+            "request": "launch",
+            "mainClass": "BacktrackingMaze_4way",
+            "projectName": "Backtracking_2bb7e39e"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-RatMaze<Backtracking_2bb7e39e>",
+            "request": "launch",
+            "mainClass": "RatMaze",
+            "projectName": "Backtracking_2bb7e39e"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-exam<Backtracking_2bb7e39e>",
+            "request": "launch",
+            "mainClass": "exam",
+            "projectName": "Backtracking_2bb7e39e"
+        }
+    ]
+}
