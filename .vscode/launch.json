@@ -6,6 +6,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - Simple2",
+            "request": "launch",
+            "mainClass": "Simple2",
+            "projectName": "Backtracking_2bb7e39e"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - swingMazeSolver",
+            "request": "launch",
+            "mainClass": "swingMazeSolver",
+            "projectName": "Backtracking_2bb7e39e"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - FirstSwingExample",
+            "request": "launch",
+            "mainClass": "FirstSwingExample",
+            "projectName": "Backtracking_2bb7e39e"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - GFG",
             "request": "launch",
             "mainClass": "GFG",
