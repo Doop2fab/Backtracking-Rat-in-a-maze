@@ -1,4 +1,4 @@
-//import java.util.*;
+import java.util.*;
 import javax.swing.*; 
 import java.awt.event.*;
 import java.awt.*;
@@ -10,25 +10,62 @@ import java.awt.*;
 
 public class swingMazeSolver extends JFrame implements ActionListener
 {
-    JButton submit, mazeSpaces; JTextField x_input_start, y_input_start, x_input_end, y_input_end ;
+    JButton submit, restart; JTextField x_input_start, y_input_start, x_input_end, y_input_end ;
     JLabel x_label_start, y_label_start, x_label_end, y_label_end;
     JTextArea mazeDisplay;
     //tile[][] tileSet;
     static int x, xend; //start and endpoint's x-value
     static int y, yend; //start and endpoint's y-value
     
+    
     swingMazeSolver() 
     {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
         setTitle("Backtracking Maze Solver");  
-        setLocation(250, 150); setSize(400, 500); setLayout(null); 
+        setLocation(250, 150); setSize(1000, 1000); setLayout(null); 
 
-        new mazeViewer();
-
-        addButtons(this); addTextFields(this); addLabels(this);
-
+        addButtons(this); addTextFields(this); addLabels(this); addTiles(this);
         setVisible(true);
+        
+        
     }
+    pictureclass[][] tileset = new pictureclass[N][N];
+    public void addTiles(JFrame swingMazeSolver)
+    {
+        
+        for(int i=0;i<N;i++)
+        {
+            for(int j=0; j<N;j++)
+            {
+                tileset[i][j]= new pictureclass(i, j);
+                swingMazeSolver.add(tileset[i][j]); 
+            }
+            
+        }
+        
+    }
+
+    class pictureclass extends JPanel
+	{ 
+        int id1, id2;
+		private static final long serialVersionUID = 1L;
+
+		public pictureclass(int i, int j)
+		{ 
+            id1=(i);
+            id2=(j);
+            setBounds(400+(10*i), 30+(10*j), 10, 10);
+            setBackground(Color.LIGHT_GRAY);
+        
+            this.addMouseListener(new MouseEventListener());
+
+            
+        }
+        public int getid1(){return id1;}
+
+        public int getid2(){return id2;}   
+    }  
+
 
     public void addButtons(JFrame swingMazeSolver)
     {
@@ -36,6 +73,11 @@ public class swingMazeSolver extends JFrame implements ActionListener
         submit.addActionListener(this);
         submit.setBounds(140,300, 100,40);
         swingMazeSolver.add(submit);// adding button on frame
+
+        restart = new JButton("Restart");// create button
+        restart.addActionListener(this);
+        restart.setBounds(140,350, 100,40);
+        swingMazeSolver.add(restart);// adding button on frame
     }
 
     public void addTextFields(JFrame swingMazeSolver)
@@ -92,18 +134,67 @@ public class swingMazeSolver extends JFrame implements ActionListener
             boolean isPath = solveMaze(maze, solution, x, y);
             printSolution(solution, isPath); 
         }
-		repaint();
-	}
+        if(e.getSource()==restart)
+        {
+            super.dispose();
+            new swingMazeSolver();
+        }
+		
+    }
+    
+    public void addWall(pictureclass pressedButton)
+    {
+        maze[pressedButton.getid2()][pressedButton.getid1()] = 0;
+    }
+    
+        static boolean mouseHeld = false;
+        public class MouseEventListener implements MouseListener
+        {
+            int timesclicked = 0;
+            
+            public void mouseClicked(MouseEvent arg0)
+            {
+                
+                
+                
+            }
+            public void mouseEntered(MouseEvent arg0)
+            {
+                if(mouseHeld)
+                {
+                    timesclicked += 1;
+                    System.out.println("Times activated: "+timesclicked);
+                    pictureclass pressedButton = (pictureclass) arg0.getSource();
+                    pressedButton.setBackground(Color.RED);
+                    addWall(pressedButton);
+                }
+            }
+            public void mouseExited(MouseEvent arg0)
+            {
+                
+            }
+            public void mousePressed(MouseEvent arg0)
+            {
+                mouseHeld = true;
+            }
+            public void mouseReleased(MouseEvent arg0)
+            {
+                mouseHeld = false;
+            }
+        }
+
+        public void drawThoughts(int x, int y)
+        {
+            tileset[y][x].setBackground(Color.YELLOW);
+            repaint();
+        }
+        
    
  //----------------------------------------------------------------------------------------------
 
     static int solution[][]; //solution matrix
     static int N; // matrix size
-    static int maze[][] = { { 1, 1, 1, 1, 1 }, //maze matrix
-                            { 1, 1, 1, 1, 1 },
-                            { 1, 1, 1, 1, 1 }, 
-                            { 1, 1, 1, 1, 1 }, 
-                            { 1, 1, 1, 1, 1 } };
+    static int maze[][];
     /**
      * Checks to see if the point in question is valid or invalid
      * @param maze Matrix filled with values of 1 and 0. 1 = valid move, 0 = invalid move 
@@ -115,6 +206,7 @@ public class swingMazeSolver extends JFrame implements ActionListener
     boolean safe(int maze[][], int x, int y) {
         if (x >= 0 && x < N && y >= 0 && y < N && maze[x][y] == 1)
         { //if point is within matrix and a valid space
+            drawThoughts(x,y);
             return true;
         } 
         else 
@@ -145,18 +237,10 @@ public class swingMazeSolver extends JFrame implements ActionListener
             {//checking x+1 to see if its safe AND not part of the solution yet
                 return true;
             }
-            if ( y>0 && solution[x][y-1]!=1 ) 
-            { //checking y-1 to see if its safe AND not part of the solution yet
-                if(solveMaze(maze, solution, x, y-1))
-                {
-                    return true;
-                }
-            }
-            if (y != N - 1 && solution[x][y+1]!=1 && solveMaze(maze, solution, x, y + 1)) 
+             if (y != N - 1 && solution[x][y+1]!=1&& solveMaze(maze, solution, x, y + 1)) 
             { //checking y+1 to see if its safe AND not part of the solution yet
                 return true;
             }
-            
             if (x>0 && solution[x-1][y]!=1 ) 
             {//checking x-1 to see if its safe AND not part of the solution yet
                 if(solveMaze(maze, solution, x - 1, y))
@@ -164,10 +248,22 @@ public class swingMazeSolver extends JFrame implements ActionListener
                     return true;
                 }
             } 
+           
+            if ( y>0 && solution[x][y-1]!=1 ) 
+            { //checking y-1 to see if its safe AND not part of the solution yet
+                if(solveMaze(maze, solution, x, y-1))
+                {
+                    return true;
+                }
+            }
+
         }
         solution[x][y] = 0;
+        
         return false;
     }
+
+       
     /**
      * Prints solution if valid path found, otherwise prints "NO VALID SOLUTION FOUND!"
      * @param solution matrix containing valid or invalid solution
@@ -233,15 +329,32 @@ public class swingMazeSolver extends JFrame implements ActionListener
                 
             }
             System.out.println();
-        }    
+        }
+          
     }
 
-    public static void main(String[] args) 
+    
+
+    public static void main(String[] args) throws InterruptedException
     {
+        
+        Scanner cin=new Scanner(System.in); //scanner for input
+        System.out.println("Please specify a size: ");
+        N=cin.nextInt();
+        maze = new int[N][N];
+        for (int i = 0; i < N; i++) 
+                { 
+                    for (int j = 0; j < N; j++) 
+                    {
+                        maze[i][j]=1;
+                    } 
+                } 
+        solution = new int[N][N];
         new swingMazeSolver();
         
-        N = maze.length;
-        solution = new int[N][N];
         printMaze(maze); //prints out maze so user can see it
+        
+         
+        
     }
 }
