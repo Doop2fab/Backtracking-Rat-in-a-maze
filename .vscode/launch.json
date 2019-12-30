@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - RatInMaze",
+            "request": "launch",
+            "mainClass": "RatInMaze",
+            "projectName": "Backtracking_2bb7e39e"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - Simple2",
             "request": "launch",
             "mainClass": "Simple2",
