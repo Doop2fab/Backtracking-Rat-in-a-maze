@@ -9,25 +9,29 @@ import java.awt.*;
 
 public class swingMazeSolver extends JFrame implements ActionListener
 {
-    JButton submit, reset;
-    JLabel messageToUser;
+    JButton submit, reset, presets, preset1, preset2, preset3, empty;
+    JLabel messageToUser=new JLabel();
+    JLabel mazeSolverDescription;
+    JFrame presetWindow;
+    Color background = new Color(50, 50, 63);
     static int x=0, xend; //start and endpoint's x-value
     static int y=0, yend; //start and endpoint's y-value
     static boolean mouseHeld = false;
-    
+    private static final long serialVersionUID = 1L;
     
     swingMazeSolver() 
     {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
         setTitle("Backtracking Maze Solver");  
-        setLocation(10, 10); setSize(1080, 1920); setLayout(null); 
-
-        addButtons(this); 
+        setLocation(0, 0); setSize(1080, 1920); setLayout(null);
+        
+        
+        addButtons(this);
         addTiles(this);
+        addTextArea(this);
         setVisible(true);
-        
-        
     }
+
     pictureclass[][] tileset = new pictureclass[N][N];
     public void addTiles(JFrame swingMazeSolver)
     {
@@ -41,6 +45,25 @@ public class swingMazeSolver extends JFrame implements ActionListener
         }
         tileset[0][0].setBackground(Color.MAGENTA);
         tileset[N-1][N-1].setBackground(Color.PINK);
+        swingMazeSolver.add(new pictureclass());
+    }
+
+    public void redrawTiles()
+    {
+        for(int i=0;i<N;i++)
+        {
+            for(int j=0; j<N;j++)
+            {
+                if(maze[i][j]==0)
+                {
+                    tileset[j][i].setBackground(Color.DARK_GRAY);
+                }
+                else{tileset[j][i].setBackground(Color.LIGHT_GRAY);}
+            }
+        }
+        tileset[0][0].setBackground(Color.MAGENTA);
+        tileset[N-1][N-1].setBackground(Color.PINK);
+        repaint();
     }
 
     class pictureclass extends JPanel
@@ -51,10 +74,20 @@ public class swingMazeSolver extends JFrame implements ActionListener
 		public pictureclass(int i, int j)
 		{ 
             id1=(i);id2=(j);
-            setBounds(420+(60*i), 10+(60*j), 60, 60);
-            setBackground(Color.LIGHT_GRAY);
+            setBounds(420+(60*i), 30+(60*j), 60, 60);
+            if(maze[i][j]==0)
+            {
+                setBackground(Color.DARK_GRAY);
+            }
+            else{setBackground(Color.LIGHT_GRAY);}
             this.addMouseListener(new MouseEventListener());
         }
+        pictureclass()
+        {
+            setBounds(410, 20, 620, 620);
+            setBackground(background);
+        }
+
         public int getid1(){return id1;}
         public int getid2(){return id2;}   
     }  
@@ -63,24 +96,76 @@ public class swingMazeSolver extends JFrame implements ActionListener
     {
         submit = new JButton("Submit");// create button
         submit.addActionListener(this);
-        submit.setBounds(140,300, 100,40);
+        submit.setBounds(50,20, 300,75);
         swingMazeSolver.add(submit);// adding button on frame
 
         reset = new JButton("Reset");// create button
         reset.addActionListener(this);
-        reset.setBounds(140,350, 100,40);
+        reset.setBounds(50,100, 300,75);
         swingMazeSolver.add(reset);// adding button on frame
+
+        presets = new JButton("Presets");// create button
+        presets.addActionListener(this);
+        presets.setBounds(50,180, 300,75);
+        swingMazeSolver.add(presets);// adding button on frame
     }
+
+    public void addPresetButtons(JFrame presetWindow)
+    {
+        
+        preset1 = new JButton("Preset 1");// create button
+        preset1.addActionListener(this);
+        preset1.setBounds(50,20, 300,75);
+        presetWindow.add(preset1);// adding button on frame
+        
+        preset2 = new JButton("Preset 2");// create button
+        preset2.addActionListener(this);
+        preset2.setBounds(50,100, 300,75);
+        presetWindow.add(preset2);// adding button on frame
+        
+        preset3 = new JButton("Preset 3");// create button
+        preset3.addActionListener(this);
+        preset3.setBounds(50,180, 300,75);
+        presetWindow.add(preset3);// adding button on frame
+
+        empty = new JButton("Empty Maze");// create button
+        empty.addActionListener(this);
+        empty.setBounds(50,260, 300,75);
+        presetWindow.add(empty);// adding button on frame
+    }
+
 
     public void addLabels(JFrame swingMazeSolver, String messageToUserText)
     {
-        messageToUser=new JLabel();
-        messageToUser.setBounds(100,200, 200,20);
+        
+        messageToUser.setBounds(60,225, 300,100);
         messageToUser.setText(messageToUserText);
+        messageToUser.setForeground(Color.RED);
+        messageToUser.setFont(messageToUser.getFont().deriveFont(17.0f));
         swingMazeSolver.add(messageToUser);
         repaint();
+        
     }
+    public void addTextArea(JFrame swingMazeSolver)
+    {
+        String labelContent = 
+        "<html><div style='text-align: center;'>Welcome to my Rat-in-a-Maze solver that implements backtracking using recursion!"+
+        " Please click and drag where you would like to place walls."+
+        " Also, ensure each space is either a <u>path</u> <font color='#D3D3D3'>(Light Gray)</font> or a <u>wall</u> <font color='#A9A9A9'>(Dark Gray)</font>,"+
+        " and there are no 2x2 spots or larger of path. If you make a mistake,"+
+        " click the Reset button.</html>";
 
+        mazeSolverDescription=new JLabel();
+        mazeSolverDescription.setBounds(50,310, 300,300);
+        mazeSolverDescription.setBackground(background);
+        mazeSolverDescription.setForeground(Color.WHITE);
+        mazeSolverDescription.setOpaque(true);
+        mazeSolverDescription.setText(labelContent);
+        mazeSolverDescription.setFont(mazeSolverDescription.getFont().deriveFont(20.0f));
+        swingMazeSolver.add(mazeSolverDescription);
+        repaint();
+    }
+    
     public void actionPerformed(ActionEvent e)
 	{
         if(e.getSource()==submit)
@@ -88,12 +173,44 @@ public class swingMazeSolver extends JFrame implements ActionListener
             boolean isPath = solveMaze(maze, solution, x, y, "down");
             printSolution(isPath); 
         }
-        if(e.getSource()==reset)
+        if(e.getSource()==empty||e.getSource()==reset)
         {
-            super.dispose();
             fillMaze(1);
-            new swingMazeSolver();
+            redrawTiles();
+            messageToUser.setText("");
+        }
+        if(e.getSource()==presets)
+        {
+            presetWindow = new JFrame("Maze Presets");
+            presetWindow.setSize(400, 600);
+            presetWindow.setLayout(null);
+            addPresetButtons(presetWindow);
+            presetWindow.setVisible(true);
+        }
+        if(e.getSource()==preset1)
+        {
+            int newMaze[][]={{1,0,1,0,1,0,1,1,1,1},
+                             {1,1,1,1,1,1,1,0,0,0},
+                             {0,0,0,0,1,0,0,0,1,0},
+                             {1,1,1,1,1,1,1,1,1,1},
+                             {1,0,0,0,0,0,0,1,0,0},
+                             {1,1,1,1,1,1,1,1,1,1},
+                             {1,0,1,0,1,0,0,0,0,1},
+                             {1,0,1,0,1,1,0,1,0,0},
+                             {1,0,0,0,0,1,0,1,1,1},
+                             {1,1,1,1,0,1,1,1,0,1}};
+                maze=newMaze;
+                redrawTiles();
         }	
+        if(e.getSource()==preset2)
+        {
+            
+        }	
+        if(e.getSource()==preset3)
+        {
+            
+        }	
+       		
     }
     
     public void addWall(pictureclass pressedButton)
