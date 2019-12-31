@@ -10,6 +10,7 @@ import java.awt.*;
 public class swingMazeSolver extends JFrame implements ActionListener
 {
     JButton submit, reset, presets, preset1, preset2, preset3, empty;
+    JDialog pathError;
     JLabel messageToUser=new JLabel();
     JLabel mazeSolverDescription;
     JFrame presetWindow;
@@ -45,7 +46,7 @@ public class swingMazeSolver extends JFrame implements ActionListener
         }
         tileset[0][0].setBackground(Color.MAGENTA);
         tileset[N-1][N-1].setBackground(Color.PINK);
-        swingMazeSolver.add(new pictureclass());
+        swingMazeSolver.add(new pictureclass(410, 20, 620, 620));
     }
 
     public void redrawTiles()
@@ -82,9 +83,9 @@ public class swingMazeSolver extends JFrame implements ActionListener
             else{setBackground(Color.LIGHT_GRAY);}
             this.addMouseListener(new MouseEventListener());
         }
-        pictureclass()
+        pictureclass(int x, int y, int width, int height)
         {
-            setBounds(410, 20, 620, 620);
+            setBounds(x,y, width, height);
             setBackground(background);
         }
 
@@ -134,7 +135,6 @@ public class swingMazeSolver extends JFrame implements ActionListener
         presetWindow.add(empty);// adding button on frame
     }
 
-
     public void addLabels(JFrame swingMazeSolver, String messageToUserText)
     {
         
@@ -146,6 +146,7 @@ public class swingMazeSolver extends JFrame implements ActionListener
         repaint();
         
     }
+
     public void addTextArea(JFrame swingMazeSolver)
     {
         String labelContent = 
@@ -157,12 +158,13 @@ public class swingMazeSolver extends JFrame implements ActionListener
 
         mazeSolverDescription=new JLabel();
         mazeSolverDescription.setBounds(50,310, 300,300);
-        mazeSolverDescription.setBackground(background);
+        mazeSolverDescription.setBackground(new Color(17, 37, 64));
         mazeSolverDescription.setForeground(Color.WHITE);
-        mazeSolverDescription.setOpaque(true);
+        mazeSolverDescription.setOpaque(true); //why are JLabels transparent by default anyways?
         mazeSolverDescription.setText(labelContent);
         mazeSolverDescription.setFont(mazeSolverDescription.getFont().deriveFont(20.0f));
-        swingMazeSolver.add(mazeSolverDescription);
+        swingMazeSolver.add(mazeSolverDescription); //info box
+        swingMazeSolver.add(new pictureclass(40,300, 320,320)); //background of info box
         repaint();
     }
     
