@@ -2,12 +2,15 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 /** 
- * This program finds ONE valid path, not necessarily the fastest, and prints it out.
- * If no paths are found, prints out "NO VALID PATH FOUND!"
+ * This is a program which extends the Swing framework that solves Rat-in-a-Maze problems. 
+ * It implements simple Backtracking by recursively determining if a space is safe to 
+ * move to or not and, if the space in question is "un-safe", the rat backtracks. 
+ * I have included 3 preset mazes, along with the ability to draw your own mazes.
  *@author Andrew Spores
+ *@version 1.0
  */
 
-public class swingMazeSolver extends JFrame implements ActionListener
+public class SwingMazeSolver extends JFrame implements ActionListener
 {
     JButton submit, reset, presets, preset1, preset2, preset3, empty, close;
     JDialog pathError;
@@ -15,12 +18,12 @@ public class swingMazeSolver extends JFrame implements ActionListener
     JLabel mazeSolverDescription;
     JFrame presetWindow;
     Color background = new Color(50, 50, 63);
-    static int x=0, xend; //start and endpoint's x-value
-    static int y=0, yend; //start and endpoint's y-value
+    static int x=0, xend; 
+    static int y=0, yend; 
     static boolean mouseHeld = false;
     private static final long serialVersionUID = 1L;
     
-    swingMazeSolver() 
+    SwingMazeSolver() 
     {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
         setTitle("Backtracking Maze Solver by Andrew");  
@@ -41,6 +44,10 @@ public class swingMazeSolver extends JFrame implements ActionListener
     }
 
     pictureclass[][] tileset = new pictureclass[N][N];
+    
+    /** 
+     * @param swingMazeSolver
+     */
     public void addTiles(JFrame swingMazeSolver)
     {
         for(int i=0;i<N;i++)
@@ -56,7 +63,7 @@ public class swingMazeSolver extends JFrame implements ActionListener
         swingMazeSolver.add(new pictureclass(410, 20, 620, 620));
     }
 
-    public void redrawTiles()
+    public void redrawTiles() //updates the maze on-screen
     {
         for(int i=0;i<N;i++)
         {
@@ -98,59 +105,72 @@ public class swingMazeSolver extends JFrame implements ActionListener
         public int getid2(){return id2;}   
     }  
 
+    
+    /** adds buttons to JFrame
+     * @param swingMazeSolver JFrame to add buttons to
+     */
     public void addButtons(JFrame swingMazeSolver)
     {
-        submit = new JButton("Submit");// create button
+        submit = new JButton("Submit");
         submit.addActionListener(this);
         submit.setBounds(50,20, 300,75);
         submit.setFont(submit.getFont().deriveFont(35.0f));
-        swingMazeSolver.add(submit);// adding button on frame
+        swingMazeSolver.add(submit);
 
-        reset = new JButton("Reset");// create button
+        reset = new JButton("Reset");
         reset.addActionListener(this);
         reset.setBounds(50,100, 300,75);
         reset.setFont(reset.getFont().deriveFont(35.0f));
-        swingMazeSolver.add(reset);// adding button on frame
+        swingMazeSolver.add(reset);
 
-        presets = new JButton("Presets");// create button
+        presets = new JButton("Presets");
         presets.addActionListener(this);
         presets.setBounds(50,180, 300,75);
         presets.setFont(presets.getFont().deriveFont(35.0f));
-        swingMazeSolver.add(presets);// adding button on frame
+        swingMazeSolver.add(presets);
     }
 
+    
+    /** adds buttons to JFrame
+     * @param presetWindow JFrame to add buttons to
+     */
     public void addPresetButtons(JFrame presetWindow)
     { 
-        preset1 = new JButton("Preset 1");// create button
+        preset1 = new JButton("Preset 1");
         preset1.addActionListener(this);
         preset1.setBounds(50,20, 300,75);
         preset1.setFont(preset1.getFont().deriveFont(35.0f));
-        presetWindow.add(preset1);// adding button on frame
+        presetWindow.add(preset1);
         
-        preset2 = new JButton("Preset 2");// create button
+        preset2 = new JButton("Preset 2");
         preset2.addActionListener(this);
         preset2.setBounds(50,100, 300,75);
         preset2.setFont(preset2.getFont().deriveFont(35.0f));
-        presetWindow.add(preset2);// adding button on frame
+        presetWindow.add(preset2);
         
-        preset3 = new JButton("Preset 3");// create button
+        preset3 = new JButton("Preset 3");
         preset3.addActionListener(this);
         preset3.setBounds(50,180, 300,75);
         preset3.setFont(preset3.getFont().deriveFont(35.0f));
-        presetWindow.add(preset3);// adding button on frame
+        presetWindow.add(preset3);
 
-        empty = new JButton("Empty Maze");// create button
+        empty = new JButton("Empty Maze");
         empty.addActionListener(this);
         empty.setBounds(50,260, 300,75);
         empty.setFont(empty.getFont().deriveFont(35.0f));
-        presetWindow.add(empty);// adding button on frame
+        presetWindow.add(empty);
 
-        close = new JButton("Close");// create button
+        close = new JButton("Close");
         close.addActionListener(this);
         close.setBounds(125,340, 150,35);
-        presetWindow.add(close);// adding button on frame
+        presetWindow.add(close);
     }
 
+    
+    /** adds JLabels to JFrame
+     * @param swingMazeSolver   JFrame to add JLabels to
+     * @param messageToUserText text to display to user
+     */
     public void addLabels(JFrame swingMazeSolver, String messageToUserText)
     {
         messageToUser.setBounds(60,225, 300,100);
@@ -161,6 +181,10 @@ public class swingMazeSolver extends JFrame implements ActionListener
         repaint();
     }
 
+    
+    /** writes info on-screen for user
+     * @param swingMazeSolver JFrame to add JTextArea
+     */
     public void addTextArea(JFrame swingMazeSolver)
     {
         String labelContent = 
@@ -182,6 +206,10 @@ public class swingMazeSolver extends JFrame implements ActionListener
         repaint();
     }
     
+    
+    /** if an actionListener fires, this decides what to do
+     * @param e action event such as a button being pressed
+     */
     public void actionPerformed(ActionEvent e)
 	{
         if(e.getSource()==submit)
@@ -228,6 +256,10 @@ public class swingMazeSolver extends JFrame implements ActionListener
         }
     }
     
+    
+    /** adds walls to maze
+     * @param pressedButton one of the tiles in the maze
+     */
     public void addWall(pictureclass pressedButton)
     {
         maze[pressedButton.getid2()][pressedButton.getid1()] = 0;
@@ -262,7 +294,7 @@ public class swingMazeSolver extends JFrame implements ActionListener
         }
     }
 
-    public void drawThoughts()
+    public void drawThoughts() //draws solution
     {
         for(int i=0; i<N;i++)
         {
@@ -277,6 +309,10 @@ public class swingMazeSolver extends JFrame implements ActionListener
         }   
     }
 
+    
+    /** re-initializes the solution and maze matrixes (matrixi? I dunno) and fills the maze with value passed 
+     * @param value value passed to fill new maze matrix (1 or 0)
+     */
     static void fillMaze(int value)
     {
         solution = new int[N][N];
@@ -394,6 +430,6 @@ public class swingMazeSolver extends JFrame implements ActionListener
     public static void main(String[] args) throws InterruptedException
     {
         fillMaze(1);
-        new swingMazeSolver();
+        new SwingMazeSolver();
     }
 }
