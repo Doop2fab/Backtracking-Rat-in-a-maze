@@ -408,7 +408,6 @@ public class SwingMazeSolver extends JFrame implements ActionListener
 
     /**
      * Prints solution if valid path found, otherwise prints "NO VALID SOLUTION FOUND!"
-     * @param solution matrix containing valid or invalid solution
      * @param isPath is the solution in question is valid or not
      */
     void printSolution(boolean isPath) 
