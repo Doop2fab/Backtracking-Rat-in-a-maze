@@ -46,7 +46,7 @@ public class SwingMazeSolver extends JFrame implements ActionListener
     pictureclass[][] tileset = new pictureclass[N][N];
     
     /** 
-     * @param swingMazeSolver
+     * @param swingMazeSolver JFrame to draw maze tiles on
      */
     public void addTiles(JFrame swingMazeSolver)
     {
@@ -358,6 +358,7 @@ public class SwingMazeSolver extends JFrame implements ActionListener
      * @param solution Solution matrix filled with values of 1 and 0. 1 = valid move, 0 = invalid move 
      * @param x x-coordinate
      * @param y y-coordinate
+     * @param direction direction rat should attempt to move
      * @return true if valid solution found, false if no valid solution found
      */
     boolean solveMaze(int maze[][], int solution[][], int x, int y, String direction) throws StackOverflowError
