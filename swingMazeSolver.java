@@ -421,10 +421,6 @@ public class SwingMazeSolver extends JFrame implements ActionListener
             addLabels(this,"START BLOCKED, PLEASE RESET!" );
         }
     }
-    /**
-     * Prints out maze for the user to visualize
-     * @param maze Matrix filled with values of 1 and 0. 1 = valid move, 0 = invalid move 
-     */
     
     public static void main(String[] args) throws InterruptedException
     {
